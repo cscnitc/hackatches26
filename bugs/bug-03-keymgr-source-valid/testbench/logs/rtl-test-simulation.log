@@ -1,0 +1,26 @@
+$ verilator --cc --exe --top-module tb \
+    +incdir+hw/ip/keymgr/rtl +incdir+hw/ip/rom_ctrl/rtl +incdir+hw/ip/prim/rtl \
+    +incdir+hw/ip/edn/rtl +incdir+hw/ip/csrng/rtl +incdir+hw/ip/entropy_src/rtl \
+    prim_util_pkg.sv prim_mubi_pkg.sv prim_msb_extend.sv entropy_src_pkg.sv \
+    csrng_pkg.sv edn_pkg.sv keymgr_reg_pkg.sv keymgr_pkg.sv rom_ctrl_pkg.sv \
+    keymgr_input_checks.sv keymgr_input_checks_tb.sv --main
+[Verilator 4.210 — compiles actual OpenTitan RTL + real dependencies]
+
+$ ./obj_dir/Vtb
+
+==================================================
+*** BUG #10 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+key_i.valid = 0  (key source says: UNTRUSTED material)
+key_vld_o   = 1  (key manager accepts the key!)
+
+Root cause: keymgr_input_checks.sv:99
+  assign key_vld_o = &key_chk;   // content check ONLY
+  line 81: assign unused_key_vld = key_i.valid; // DISCARDED
+
+Impact: session keys derived from unvalidated key material
+when source key bytes are non-zero/non-all-ones but valid=0.
+==================================================
+- /tmp/bug10_real/tb.sv:78: Verilog $finish
+[t=0] key_i.valid=0 | key_vld_o=1 | key_chk=11 | creator_seed_vld_o=1
+[t=0] key_i.valid=0 | key_vld_o=1 | key_chk=11 | creator_seed_vld_o=1

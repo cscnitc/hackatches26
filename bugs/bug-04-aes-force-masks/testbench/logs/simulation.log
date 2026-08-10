@@ -1,0 +1,6 @@
+[t=2] SecAllowForcingMasks=1 *** BUG 15 ***
+[t=3] SecAllowForcingMasks=1 *** BUG 15 ***
+[t=4] SecAllowForcingMasks=1 *** BUG 15 ***
+[t=5] SecAllowForcingMasks=1 *** BUG 15 ***
+[t=6] SecAllowForcingMasks=1 *** BUG 15 ***
+BUG CONFIRMED — Verilator 5.020

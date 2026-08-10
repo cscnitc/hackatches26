@@ -1,0 +1,18 @@
+=== Bug #15: AES force masks ===
+# ALL crash inputs have bit 0 = 1 → force_masks_i = 1 → PRNG output zero → bug detected
+
+# Crash 000000 (time:2478): mutated from safe seed, havoc+rep 13
+hex: 7f 20 20 20 20 20 10 20 20 20 7f 20 00
+
+# Crash 000000 (time:59918): force_masks=1 (byte 0x15, bit0 set)  
+hex: 00 15 ff ff e4
+
+# Crash 000001 (time:141507): force_masks=1 (byte 0x01)
+hex: 01 f0 ff 00 00
+
+# Crash 000001 (time:32293): force_masks=1 (byte 0x01)
+hex: 00 00 00 80 f0 01 01
+
+# Crash 000001 (time:69855): force_masks=1 (byte 0x05, bit0 set)
+hex: 05 ff ff 05 00
+

@@ -1,0 +1,6 @@
+[t=2] err_flag=0 *** BUG 18 ***
+[t=3] err_flag=0 *** BUG 18 ***
+[t=4] err_flag=0 *** BUG 18 ***
+[t=5] err_flag=0 *** BUG 18 ***
+[t=6] err_flag=0 *** BUG 18 ***
+BUG CONFIRMED — Verilator 5.020

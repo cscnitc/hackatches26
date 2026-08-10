@@ -1,0 +1,19 @@
+=== CTN access-range check ===
+  range_check_overwrite_i = 0x96 (MuBi8True=1)
+  a_valid=1 addr=0xdeadbeef (OUTSIDE allowed ranges, policy=0)
+  range_check_grant (internal) = 1 (BUG: should be 0 — request denied)
+
+==================================================
+*** BUG #8 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+chiplevel.sv.tpl:844 hardcodes range_check_overwrite
+= MuBi8True — CTN access-range check ALWAYS grants.
+Out-of-range access (addr 0xDEADBEEF) is GRANTED
+despite no RACL policy allowing it.
+
+Impact: RACL range protection bypassed — arbitrary
+memory/peripheral access from the CTN domain.
+==================================================
+- /tmp/bug8_real/tb.sv:104: Verilog $finish
+- /tmp/bug8_real/tb.sv:104: Verilog $finish
+- /tmp/bug8_real/tb.sv:104: Second verilog $finish, exiting

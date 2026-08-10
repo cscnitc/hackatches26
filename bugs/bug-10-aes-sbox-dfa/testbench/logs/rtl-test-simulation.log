@@ -1,0 +1,22 @@
+=== Counter sequence 0..7 ===
+  final count_q=4 (plain binary)
+  we[0..3] fired in sequence? we_seen=00001111
+  out_req_o (at count=4) seen? 0
+  SEC_CM: NO fault detection on counter (no err_o)
+  single-bit fault 3'b011->3'b111 would skip we[2..3]
+  and repeat/fire out_req early — UNDETECTABLE
+
+==================================================
+*** BUG #17 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+aes_sbox_dom.sv:1050-1067 — count_q is a plain
+3-bit binary counter with NO fault detection.
+It controls we[0..3]/out_req_o (S-Box stage order).
+A single-bit fault skips/repeats stages, breaking
+DOM domain separation — fault is undetectable.
+(OpenTitan requires prim_count cross-counter or
+ sparse encoding for such control counters)
+==================================================
+- /tmp/bug17_real/tb.sv:104: Verilog $finish
+- /tmp/bug17_real/tb.sv:104: Verilog $finish
+- /tmp/bug17_real/tb.sv:104: Second verilog $finish, exiting

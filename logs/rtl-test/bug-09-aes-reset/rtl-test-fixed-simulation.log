@@ -1,0 +1,36 @@
+VERILATED
+make: Leaving directory '/tmp/b16fix/obj_dir'
+=== Bug 09: AES data_out reset-gating — real encryption + reset glitch ===
+  [t=1] idle=0 ctrl_err_storage=0 alert=0 crypto_alert=0 mode=1
+  [t=14] data_out_we == SP2V_HIGH (cipher completion cycle)
+  [t=14] data_out_q before glitch = 0x0000000000000000000000000000000000000000000000000000000000000000
+
+=== Result after reset glitch on output cycle ===
+  data_out_q now = 0x1a30325e9d8b4ad4c9b7ea29b397f1fe1a30325e9d8b4ad4c9b7ea29b397f1fe
+
+==================================================
+*** BUG 09 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+aes_core.sv:873-877 — data_out_reg reset is GATED:
+  if (!rst_ni && data_out_we != SP2V_HIGH) clear
+  else if (data_out_we == SP2V_HIGH) write data_out_d
+A reset landing on the cipher-completion cycle
+(data_out_we==SP2V_HIGH) WRITES ciphertext into
+data_out_q instead of clearing it — stale secret
+data survives reset (observed non-zero above).
+A correct implementation clears on reset regardless.
+==================================================
+- /tmp/bug16_fixed/tb.sv:210: Verilog $finish
+done, glitch=0 finished=1 state=8
+=== key lines ===
+=== Bug 09: AES data_out reset-gating — real encryption + reset glitch ===
+  [t=14] data_out_we == SP2V_HIGH (cipher completion cycle)
+  [t=14] data_out_q before glitch = 0x0000000000000000000000000000000000000000000000000000000000000000
+=== Result after reset glitch on output cycle ===
+  data_out_q now = 0x1a30325e9d8b4ad4c9b7ea29b397f1fe1a30325e9d8b4ad4c9b7ea29b397f1fe
+*** BUG 09 CONFIRMED on actual OpenTitan RTL ***
+  if (!rst_ni && data_out_we != SP2V_HIGH) clear
+  else if (data_out_we == SP2V_HIGH) write data_out_d
+(data_out_we==SP2V_HIGH) WRITES ciphertext into
+data_out_q instead of clearing it — stale secret
+done, glitch=0 finished=1 state=8

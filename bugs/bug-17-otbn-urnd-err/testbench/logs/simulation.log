@@ -1,0 +1,6 @@
+[t=2] fips=1 rep=1 req=1 ack=1 *** BUG 24 ***
+[t=3] fips=1 rep=1 req=1 ack=1 *** BUG 24 ***
+[t=4] fips=1 rep=1 req=1 ack=1 *** BUG 24 ***
+[t=5] fips=1 rep=1 req=1 ack=1 *** BUG 24 ***
+[t=6] fips=1 rep=1 req=1 ack=1 *** BUG 24 ***
+BUG CONFIRMED — Verilator 5.020

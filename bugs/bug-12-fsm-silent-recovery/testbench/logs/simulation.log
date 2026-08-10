@@ -1,0 +1,6 @@
+[t=2] state=3ff fsm_err=0 *** BUG 19 ***
+[t=3] state=3ff fsm_err=0 *** BUG 19 ***
+[t=4] state=3ff fsm_err=0 *** BUG 19 ***
+[t=5] state=3ff fsm_err=0 *** BUG 19 ***
+[t=6] state=3ff fsm_err=0 *** BUG 19 ***
+BUG CONFIRMED — Verilator 5.020

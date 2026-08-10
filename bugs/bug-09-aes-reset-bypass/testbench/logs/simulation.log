@@ -1,0 +1,6 @@
+[t=2] data_out=de *** BUG 16 ***
+[t=3] data_out=de *** BUG 16 ***
+[t=4] data_out=de *** BUG 16 ***
+[t=5] data_out=de *** BUG 16 ***
+[t=6] data_out=de *** BUG 16 ***
+BUG CONFIRMED — Verilator 5.020

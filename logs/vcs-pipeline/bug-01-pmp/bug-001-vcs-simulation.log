@@ -1,0 +1,35 @@
+Chronologic VCS simulator copyright 1991-2023
+Contains Synopsys proprietary information.
+Compiler version U-2023.03_Full64; Runtime version U-2023.03_Full64;  Aug  6 15:48 2026
+============================================================
+Bug-01: PMP Error Output Logic Broken
+Target: ibex_pmp.sv:285
+pmp_req_err_o = access_violation_detected & ~fault_analysis_result
+============================================================
+
+[T1: No PMP — access OK] PASS: pmp_req_err_o=0
+[T2: Locked PMP region, U-mode read — DENY expected] pmp_req_err_o = 0 (expected 1 for deny)
+[T2: Locked PMP region, U-mode read — DENY expected] BUG CONFIRMED: PMP violation NOT reported — err=0
+[T3: Write to locked region — DENY expected] pmp_req_err_o = 0 (expected 1)
+[T3: Write to locked region — DENY expected] BUG CONFIRMED: Write violation not reported
+[T4: Execute to locked region — DENY expected] pmp_req_err_o = 0 (expected 1)
+[T4: Execute to locked region — DENY expected] BUG CONFIRMED: Execute violation not reported
+[T5: M-mode read to locked region — DENY expected] pmp_req_err_o = 0 (expected 1)
+[T5: M-mode read to locked region — DENY expected] BUG CONFIRMED: M-mode violation not reported
+[T6: Access outside PMP region — OK expected] PASS: Access outside region OK
+
+============================================================
+RESULTS: Total=6, Errors=0
+============================================================
+VERDICT: BUG-001 CONFIRMED
+  pmp_req_err_o = access_violation_detected & ~fault_analysis_result
+  When fault_analysis_result=1 (violation), ~fault_analysis_result=0
+  => pmp_req_err_o is ALWAYS 0, PMP completely disabled
+  Security: Any unprivileged code can access any memory
+============================================================
+$finish called from file "tb/tb_bug01_pmp.sv", line 155.
+$finish at simulation time                 7000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 7000 ps
+CPU Time:      0.110 seconds;       Data structure size:   0.0Mb
+Thu Aug  6 15:48:31 2026

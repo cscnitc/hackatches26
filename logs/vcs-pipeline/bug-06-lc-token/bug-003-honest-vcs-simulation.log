@@ -1,0 +1,34 @@
+Contains Synopsys proprietary information.
+============================================================
+Bug-003: LC Token Hash Truncated to 32 Bits (RTL, HONEST)
+Target: lc_ctrl_fsm.sv:456,497 (real OpenTitan RTL)
+============================================================
+  35000ps.
+[T1] PASS: FSM in IdleSt (PROD)
+  75000ps.
+  85000ps.
+  95000ps.
+  125000ps.
+  135000ps.
+  165000ps.
+  205000ps.
+  215000ps.
+  225000ps.
+[RESULT] forged[31:0]=deadbeef real[31:0]=deadbeef  128-bit match=0
+[RESULT] final fsm=PostTransSt
+[RESULT] sticky: trans_success_seen=1 otp_prog_seen=1 flash_rma_seen=1 tokerr_seen=0
+[RESULT] live: token_invalid_error_o=0 trans_success_o=0 otp_prog_lc_state_o=LcStProd
+[RESULT] trans_invalid_error_o=0 flash_rma_error_o=0 otp_prog_error_o=0
+[T2] PASS: forged token (upper 96 bits wrong) ACCEPTED;
+         PROD->RMA transition COMPLETED (trans_success seen)
+VERDICT: BUG-003 CONFIRMED
+  lc_ctrl_fsm.sv:456,497: hashed_token_i[31:0] == hashed_token_mux[31:0]
+  A token matching only the low 32 bits completes an unauthorized
+  PROD->RMA (RMA-wipe) transition end-to-end on real RTL.
+============================================================
+$finish called from file "tb_bug03_fixed.sv", line 258.
+$finish at simulation time              3076000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 3076000 ps
+CPU Time:      0.200 seconds;       Data structure size:   0.2Mb
+Sun Aug  9 10:56:35 2026

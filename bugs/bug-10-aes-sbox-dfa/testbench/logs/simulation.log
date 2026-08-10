@@ -1,0 +1,6 @@
+[t=2] count=0 we=0001 out_req=0 *** BUG 17 ***
+[t=3] count=1 we=0010 out_req=0 *** BUG 17 ***
+[t=4] count=2 we=0100 out_req=0 *** BUG 17 ***
+[t=5] count=3 we=1000 out_req=0 *** BUG 17 ***
+[t=6] count=4 we=0000 out_req=1 *** BUG 17 ***
+BUG CONFIRMED — Verilator 5.020

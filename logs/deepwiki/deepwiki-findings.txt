@@ -1,0 +1,958 @@
+Search | DeepWiki
+
+1 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+Share
+
+astroanax/opentitan-test
+
+hi
+
+Hello! I'm Devin, and I can help you with questions about the OpenTitan codebase. I can see
+you're working with the astroanax/opentitan-test repository, which contains hardware,
+software, and utilities for the OpenTitan project - an open source silicon Root of Trust (RoT)
+implementation. README.md:1-14
+I can help you with:
+• Project governance and contribution processes
+• Hardware development stages (D0-D3) and IP maturity tracking
+• Code contribution guidelines and RFC processes
+• Technical commi�ee structure and responsibilities
+• Security considerations and vulnerability reporting
+• Use cases like Platform Integrity Module, TPM, and U2F security keys
+What would you like to know about the OpenTitan project?
+
+The context provided shows governance and contribution documentation rather than the speci�c
+"OpenTitan Project Overview" wiki page mentioned in your query. I can see information about
+project structure, contribution guidelines, and technical governance from the available �les.
+Wiki pages you might want to explore:
+•
+
+astroanax/opentitan-test README.md
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+2 of 32
+
+1
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+# OpenTitan
+
+2
+3
+
+![OpenTitan logo](https://docs.opentitan.org/doc/opentitan-logo.png)
+
+4
+5
+
+## About the project
+
+6
+
+[OpenTitan](https://opentitan.org) is an open source silicon Root of Trust
+(RoT) project. OpenTitan will make the silicon RoT design and implementation
+9 more transparent, trustworthy, and secure for enterprises, platform providers,
+10 and chip manufacturers. OpenTitan is administered by [lowRISC
+11 CIC](https://www.lowrisc.org) as a collaborative project to produce high
+12 quality, open IP for instantiation as a full-featured product. See the
+13 [OpenTitan site](https://opentitan.org/) and [OpenTitan
+14 docs](https://opentitan.org/book) for more information about the project.
+7
+8
+
+15
+16
+
+## About this repository
+
+17
+
+astroanax/opentitan-test
+I want you to verify if the following is an actual hardware security bug: HW-001 — Production
+lifecycle state matches test-unlocked case Security feature bypassed: Lifecycle-controlled
+debug, DFT, an...
+Show full text
+
+Yes, this is a
+
+in the OpenTitan lifecycle controller signal
+
+decoder. lc_ctrl_signal_decode.sv:109-124 lc_ctrl_signal_decode.sv:138-154
+
+The lifecycle state LcStProd is incorrectly included in two di�erent case branches within the
+unique case statement in lc_ctrl_signal_decode.sv :
+
+�.
+
+(lines 109-124): Enables debug features including lc_dft_en ,
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+3 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+lc_nvm_debug_en , lc_hw_debug_en lc_ctrl_signal_decode.sv:109-124
+
+�.
+
+(lines 138-154): Enables production features like lc_keymgr_en ,
+lc_owner_seed_sw_rw_en lc_ctrl_signal_decode.sv:138-154
+
+This violates the unique case constraint in SystemVerilog, which requires that exactly one case
+item matches the expression. The security implications are:
+: The production state could enable debug/DFT
+
+•
+
+features, exposing protected memories and cryptographic material
+: This becomes a compile-time error, but it's still a critical bug
+
+•
+
+that could block production builds
+: The test-unlocked branch uses RndCnstLcKeymgrDivTestUnlocked
+
+•
+
+instead of RndCnstLcKeymgrDivProduction , potentially weakening cryptographic isolation
+lc_ctrl_signal_decode.sv:123 lc_ctrl_signal_decode.sv:146
+
+The bug report's test assertion would correctly fail:
+
+lc_state_i
+
+= LcStProd;
+
+lc_state_valid_i = On;
+#1;
+assert (lc_dft_en_o
+
+=== Off);
+
+// Would fail if wrong branch selected
+
+assert (lc_nvm_debug_en_o === Off);
+
+// Would fail if wrong branch selected
+
+assert (lc_hw_debug_en_o
+
+// Would fail if wrong branch selected
+
+=== Off);
+
+The proposed mitigation is correct:
+�. Remove LcStProd from the test-unlocked case item (line 116)
+�. Add formal veri�cation properties to ensure exactly one branch matches per state
+�. Add assertions that debug/DFT signals are Off in production states
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+4 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+The unique case keyword should theoretically prevent this from being a runtime issue, but
+relying on tool-speci�c behavior for security-critical decoding is dangerous. This is a genuine
+security bug that needs immediate �xing regardless of tool behavior. The state de�nition in
+lc_ctrl_state_pkg.sv con�rms LcStProd is a distinct production state that should not have
+
+debug capabilities enabled. lc_ctrl_state_pkg.sv:306
+Wiki pages you might want to explore:
+•
+
+astroanax/opentitan-test hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+5 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+///////////////////////////////////////////////////////////////////
+// Enable DFT and debug functionality, including the CPU in the
+// test unlocked states.
+LcStTestUnlocked0,
+LcStTestUnlocked1,
+LcStTestUnlocked2,
+LcStTestUnlocked3,
+LcStTestUnlocked4,
+LcStTestUnlocked5,
+LcStTestUnlocked6,
+LcStProd: begin
+lc_raw_test_rma
+= On;
+lc_dft_en
+= On;
+
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+
+astroanax/opentitan-test
+HW-001 — Production lifecycle state matches test-unlocked case Security feature bypassed:
+Lifecycle-controlled debug, DFT, and key-manager isolation. Finding: LcStProd appears in both
+the test-unlocke...
+Show full text
+
+Yes, this is a
+
+in the OpenTitan lifecycle controller signal
+
+decoder. lc_ctrl_signal_decode.sv:109-124 lc_ctrl_signal_decode.sv:138-154
+
+The lifecycle state LcStProd is incorrectly included in two di�erent case branches within the
+unique case statement in lc_ctrl_signal_decode.sv :
+
+�.
+
+(lines 109-124): Enables debug features including lc_dft_en ,
+lc_nvm_debug_en , lc_hw_debug_en lc_ctrl_signal_decode.sv:109-124
+
+�.
+
+(lines 138-154): Enables production features like lc_keymgr_en ,
+lc_owner_seed_sw_rw_en lc_ctrl_signal_decode.sv:138-154
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+6 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+This violates the unique case constraint in SystemVerilog, which requires that exactly one case
+item matches the expression. The security implications are:
+: The production state could enable debug/DFT
+
+•
+
+features, exposing protected memories and cryptographic material
+•
+
+: This becomes a compile-time error, but it's still a critical bug
+that could block production builds
+
+•
+
+: The test-unlocked branch uses RndCnstLcKeymgrDivTestUnlocked
+instead of RndCnstLcKeymgrDivProduction , potentially weakening cryptographic isolation
+lc_ctrl_signal_decode.sv:123 lc_ctrl_signal_decode.sv:146
+
+The proposed mitigation is correct:
+�. Remove LcStProd from the test-unlocked case item (line 116)
+�. Add formal veri�cation properties to ensure exactly one branch matches per state
+�. Add assertions that debug/DFT signals are Off in production states
+
+The unique case keyword should theoretically prevent this from being a runtime issue, but
+relying on tool-speci�c behavior for security-critical decoding is dangerous. This is a genuine
+security bug that needs immediate �xing regardless of tool behavior.
+Wiki pages you might want to explore:
+•
+
+astroanax/opentitan-test hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+7 of 32
+
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+///////////////////////////////////////////////////////////////////
+// Enable DFT and debug functionality, including the CPU in the
+// test unlocked states.
+LcStTestUnlocked0,
+LcStTestUnlocked1,
+LcStTestUnlocked2,
+LcStTestUnlocked3,
+LcStTestUnlocked4,
+LcStTestUnlocked5,
+LcStTestUnlocked6,
+LcStProd: begin
+lc_raw_test_rma
+= On;
+lc_dft_en
+= On;
+lc_nvm_debug_en
+= On;
+lc_hw_debug_en
+= On;
+lc_cpu_en
+= On;
+lc_iso_part_sw_wr_en = On;
+lc_keymgr_div_d
+= RndCnstLcKeymgrDivTestUnlocked;
+end
+///////////////////////////////////////////////////////////////////
+// This is the last TEST_UNLOCKED state. The same feature set is enabled
+// as in the other TEST_UNLOCKED states above, except for NVM debug en,
+
+lc_keymgr_div_d
+= RndCnstLcKeymgrDivTestUnlocked;
+end
+///////////////////////////////////////////////////////////////////
+// Enable production functions
+LcStProd,
+LcStProdEnd: begin
+lc_cpu_en
+= On;
+lc_keymgr_en
+= On;
+lc_owner_seed_sw_rw_en = On;
+lc_iso_part_sw_wr_en
+= On;
+lc_iso_part_sw_rd_en
+= On;
+lc_keymgr_div_d
+= RndCnstLcKeymgrDivProduction;
+// Only allow provisioning if the device has not yet been personalized.
+// If secrets_valid_i is set to ON, we output OFF.
+// Note that we can convert ON to OFF with a bitwise inversion due to the encoding.
+lc_creator_seed_sw_rw_en = lc_tx_t'(~secrets_valid_i);
+// Only allow hardware to consume the seeds once personalized.
+
+astroanax/opentitan-test
+HW-002 — CTN access-range checks permanently overridden Security feature bypassed:
+CTN address-range and permission isolation. Finding: Darjeeling hardwires the access-rangecheck override to MuBi8Tru...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+8 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+Show full text
+
+Yes, this is a
+
+in the Darjeeling SoC variant.
+
+chiplevel.sv.tpl:842-844 ac_range_check.sv:226-229
+
+The access range check override signal ac_range_check_overwrite_i is hardwired to
+MuBi8True in the Darjeeling chip-level template, permanently bypassing all CTN address-range
+
+and permission checks. chiplevel.sv.tpl:842-844
+This hardwired override is also present in the generated ASIC wrapper at line 1467-1468.
+chip_darjeeling_asic.sv:1467-1468
+
+The ac_range_check module grants requests when either:
+�. The address matches an enabled range with proper permissions, OR
+�. The range_check_overwrite_i signal is true ac_range_check.sv:226-229
+Since the override is permanently true,
+, completely bypassing the security feature designed to enforce address-range and
+permission isolation for the CTN (Chip-to-Network) interface.
+
+The code includes a TODO comment indicating this is temporary: "TODO: Over/ride/ all access
+range checks for now." chiplevel.sv.tpl:842-844
+The test plan con�rms the bypass is a designed feature with a dedicated test
+( ac_range_bypass_enable ), but it should be con�gurable rather than permanently enabled.
+ac_range_check_testplan.hjson:67-84
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+9 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+�. Remove the hardwired assignment and connect ac_range_check_overwrite_i to a
+con�gurable source (e.g., OTP, lifecycle controller, or register)
+�. Ensure the override defaults to MuBi8False in production con�gurations
+�. Add assertions that verify range checks are enforced when no override is active
+
+This is a development artifact that should never reach production. The Darjeeling variant is
+designed as an integrated "Secure Island" for larger SoCs, and the CTN interface is the primary
+security boundary for external accesses. Permanently disabling this boundary defeats the
+purpose of the RACL (Resource Access Control List) system that Darjeeling introduces.
+top_darjeeling.sv:2656-2686
+
+Wiki pages you might want to explore:
+•
+
+astroanax/opentitan-test hw/top_darjeeling/templates/chiplevel.sv.tpl
+839
+840
+
+assign ctn_misc_tl_h2d_i = tlul_pkg::TL_H2D_DEFAULT;
+tlul_pkg::tl_d2h_t ctn_misc_tl_d2h_o;
+
+841
+842
+
+// TODO: Over/ride/ all access range checks for now.
+
+843
+
+prim_mubi_pkg::mubi8_t ac_range_check_overwrite_i;
+assign ac_range_check_overwrite_i = prim_mubi_pkg::MuBi8True;
+
+844
+845
+846
+847
+
+// TODO: External RACL error input.
+top_racl_pkg::racl_error_log_t ext_racl_error;
+
+astroanax/opentitan-t… hw/top_darjeeling/ip_autogen/ac_range_check/rtl/ac_range_ch…
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+10 of 32
+
+223
+224
+225
+226
+227
+228
+229
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+//
+priority grants the request or
+// (2.2) range checks are bypassed.
+logic range_check_grant;
+assign range_check_grant = ctn_tl_h2d_i.a_valid & (
+(|addr_hit & (grant_mask > deny_mask)) |
+prim_mubi_pkg::mubi8_test_true_strict(range_check_overwrite_i)
+);
+
+230
+231
+232
+
+// A request gets denied if and only if it is valid and doesn't get granted.
+logic range_check_fail;
+
+astroanax/opentitan-test hw/top_darjeeling/rtl/autogen/chip_darjeeling_asic.sv
+1464
+
+tlul_pkg::tl_d2h_t ctn_misc_tl_d2h_o;
+
+1465
+1466
+1467
+1468
+
+// TODO: Over/ride/ all access range checks for now.
+prim_mubi_pkg::mubi8_t ac_range_check_overwrite_i;
+assign ac_range_check_overwrite_i = prim_mubi_pkg::MuBi8True;
+
+astroanax/opentitan-test
+HW-003 — AES constant-mask mode enabled in ASIC con�guration Security feature
+bypassed: AES masking and side-channel resistance. Finding: The Darjeeling ASIC wrapper
+passes .SecAesAllowForcingMasks(1...
+Show full text
+
+I cannot fully verify this bug report as wri�en because the speci�c �les mentioned
+( chip_darjeeling_asic.sv line 1655 and Darjeeling's chiplevel.sv.tpl line 1035) are not
+available in the provided context.
+However, based on the available context,
+
+1'b0 ,
+
+not 1'b1 as claimed in the bug report. top_darjeeling.sv:67 top_darjeeling.gen.hjson:5216
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+11 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+The Darjeeling top-level module de�nes SecAesAllowForcingMasks with a default of 1'b0 :
+top_darjeeling.sv:67
+
+The generated HJSON con�guration also speci�es the default as 1'b0 :
+top_darjeeling.gen.hjson:5208-5220
+
+The AES IP parameter is explicitly documented as SCA/test-only with a default of 1'b0 :
+aes.hjson:82-92
+
+The AES PRNG masking module includes a static lint error that �res if SecAllowForcingMasks is
+non-zero: aes_prng_masking.sv:67-68
+
+The EarlGrey chip-level template does set this parameter to 1'b1 for FPGA targets (cw310,
+cw340) for SCA evaluation purposes: chiplevel.sv.tpl:1142 chiplevel.sv.tpl:1156
+
+The bug report claims Darjeeling ASIC wrapper has SecAesAllowForcingMasks(1'b1) , but the
+available evidence shows Darjeeling defaults to 1'b0 . The bug report may be:
+�. Referring to a di�erent con�guration or build variant not in the provided context
+�. Confusing Darjeeling with EarlGrey's FPGA con�guration
+�. Referring to an outdated version of the code
+To fully verify this claim, the speci�c �les mentioned ( chip_darjeeling_asic.sv line 1655 and
+Darjeeling's chiplevel.sv.tpl line 1035) would need to be examined. The lint error in
+aes_prng_masking.sv should prevent synthesis if this parameter is incorrectly set to 1'b1 in
+
+production builds. aes_prng_masking.sv:67-68
+Wiki pages you might want to explore:
+•
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+12 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+astroanax/opentitan-test hw/top_darjeeling/rtl/autogen/top_darjeeling.sv
+64
+65
+66
+67
+68
+69
+70
+
+parameter bit SecAesMasking = 1,
+parameter aes_pkg::sbox_impl_e SecAesSBoxImpl = aes_pkg::SBoxImplDom,
+parameter int unsigned SecAesStartTriggerDelay = 0,
+parameter bit SecAesAllowForcingMasks = 1'b0,
+parameter bit SecAesSkipPRNGReseeding = 1'b0,
+// parameters for hmac
+// parameters for kmac
+
+astroanax/opentitan-test hw/top_darjeeling/data/autogen/top_darjeeling.gen.hjson
+name_top: SecAesStartTriggerDelay
+
+5205
+5206
+5207
+
+}
+{
+
+name: SecAllowForcingMasks
+desc:
+'''
+Forbid (0) or allow (1) forcing the masking PRNG output to a constant value via FORC
+Useful for SCA measurements.
+Meaningful only if masking is enabled.
+'''
+type: bit
+default: 1'b0
+local: "false"
+expose: "true"
+name_top: SecAesAllowForcingMasks
+
+5208
+5209
+5210
+5211
+5212
+5213
+5214
+5215
+5216
+5217
+5218
+5219
+5220
+5221
+5222
+5223
+
+}
+{
+name: SecSkipPRNGReseeding
+desc:
+
+astroanax/opentitan-test hw/ip/aes/data/aes.hjson
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+13 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+astroanax/opentitan-test
+HW-004 — Volatile RAW unlock enabled in Darjeeling ASIC Security feature bypassed:
+Lifecycle transition and debug lockdown. Finding: Darjeeling sets: localparam int
+SecVolatileRawUnlockEn = 1; The sou...
+Show full text
+View as codemap
+
+I cannot fully verify this bug report as wri�en because the speci�c �le mentioned ( top_pkg.sv
+line 16) is not available in the provided context.
+However, based on the available context,
+, but it could still be a security concern if Darjeeling production ASICs are
+built with SecVolatileRawUnlockEn = 1 . top_darjeeling.gen.hjson:1778-1795
+
+The SecVolatileRawUnlockEn parameter is a documented feature that allows a volatile RAW ->
+TEST_UNLOCKED0 transition without programming OTP, intended as a fallback for test chips with
+
+potentially malfunctioning OTP macros. lc_ctrl.hjson:58-73
+The lifecycle controller FSM implements this transition when the parameter is enabled, requiring:
+• Device in RAW state
+• Valid transition command
+• Correct hashed unlock token ( RndCnstRawUnlockTokenHashed ) lc_ctrl_fsm.sv:294-325
+
+The documentation explicitly warns:
+
+"IMPORTANT NOTE: This should only be used in test chips. The parameter must be set to 0 in
+production tapeouts since this weakens the security posture of the RAW UNLOCK
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+14 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+mechanism." lc_ctrl.hjson:58-73
+The programmer's guide also states: "On production silicon this option will be disabled."
+programmers_guide.md:35-38
+
+The parameter is propagated from top_pkg::SecVolatileRawUnlockEn to both lc_ctrl and
+rv_dm in the Darjeeling con�guration. top_darjeeling.gen.hjson:1760
+top_darjeeling.gen.hjson:4676-4721
+
+The volatile unlock logic is conditionally compiled based on this parameter:
+• The register is only generated when SecVolatileRawUnlockEn is true lc_ctrl.sv:569-581
+• The FSM only checks the volatile unlock condition when the parameter is enabled
+lc_ctrl_fsm.sv:294-325
+
+If Darjeeling production ASICs are built with SecVolatileRawUnlockEn = 1 :
+: Physical a�acker with JTAG access to a RAW device could use the public
+
+•
+
+token to transition to TEST_UNLOCKED0
+: Enables debug and DFT functions, bypassing the normal lifecycle transition
+
+•
+
+mechanism
+: Only a�ects devices in RAW state; does not allow transitions from locked production
+
+•
+states
+
+The exploit �ow described in the bug report is technically feasible if the parameter is enabled, as
+the token is publicly available in the RTL.
+
+without access to top_pkg.sv to verify the actual parameter value in
+Darjeeling.
+Evidence suggesting it may be enabled in Darjeeling:
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+15 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+• There is a dedicated DV test for volatile raw unlock in Darjeeling
+chip_sw_lc_volatile_raw_unlock_vseq.sv:1-60
+
+• The parameter is referenced as top_pkg::SecVolatileRawUnlockEn in generated �les
+Evidence suggesting it should be disabled in production:
+• Explicit documentation warnings
+• Default value in IP is 1'b0
+• Existence of a simulation con�guration with volatile unlock disabled
+lc_ctrl_dmi_volatile_unlock_disabled_sim_cfg.hjson:13-16
+
+This is a
+
+rather than an RTL bug. The RTL correctly implements the
+
+feature with proper gating and documentation. The security concern is whether Darjeeling
+production builds incorrectly enable this test-chip-only feature.
+To fully verify, the top_pkg.sv �le would need to be examined to con�rm the actual value of
+SecVolatileRawUnlockEn . If it is set to 1 for production ASIC builds, this would be a security
+
+miscon�guration that should be corrected before production tapeout.
+Wiki pages you might want to explore:
+•
+Wiki pages you might want to explore:
+•
+•
+
+astroanax/opentitan-test hw/top_darjeeling/data/autogen/top_darjeeling.gen.hjson
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+16 of 32
+
+1757
+1758
+1759
+1760
+1761
+1762
+1763
+1775
+1776
+1777
+1778
+1779
+1780
+1781
+1782
+1783
+1784
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+}
+param_decl:
+{
+SecVolatileRawUnlockEn: top_pkg::SecVolatileRawUnlockEn
+SiliconCreatorId: 16'h 4002
+ProductId: 16'h 4000
+RevisionId: 8'h 01
+param_list:
+[
+{
+name: SecVolatileRawUnlockEn
+desc:
+'''
+Disable (0) or enable (1) volatile RAW UNLOCK capability.
+If enabled, it is possible to perform a volatile RAW -> TEST_UNLOCKED0 transition
+without programming the OTP. This is a useful fallback mode in case the OTP is
+not working correctly.
+
+1785
+
+IMPORTANT NOTE: This should only be used in test chips. The parameter must be set
+to 0 in production tapeouts since this weakens the security posture of the RAW
+UNLOCK mechanism.
+'''
+type: bit
+default: top_pkg::SecVolatileRawUnlockEn
+local: "false"
+expose: "true"
+name_top: SecLcCtrlVolatileRawUnlockEn
+
+1786
+1787
+1788
+1789
+1790
+1791
+1792
+1793
+1794
+1795
+1796
+1797
+1798
+
+}
+{
+name: UseDmiInterface
+desc: When 1, a TLUL-based DMI interface is used. When 0, a JTAG TAP is used.
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+17 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+18 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+19 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+20 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+21 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+22 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+23 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+24 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+25 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+26 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+27 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+28 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+29 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+30 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+31 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+Search | DeepWiki
+
+32 of 32
+
+https://deepwiki.com/search/hi_80ba5f74-e356-4242-9042-e...
+
+7/24/26, 5:17 PM
+
+

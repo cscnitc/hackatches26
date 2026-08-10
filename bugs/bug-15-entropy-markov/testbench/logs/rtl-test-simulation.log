@@ -1,0 +1,25 @@
+VERILATED
+make: Leaving directory '/tmp/b22work/obj_dir'
+=== After 40-bit ALTERNATING stream (all 01/10 pairs) ===
+  thresh_hi_i=4 -> 40 alternating pairs should trip hi
+  test_cnt_hi_o=20 test_fail_hi_pulse_o=0 test_fail_lo_pulse_o=0
+  (pair_cntr[0] internal = 20)
+
+==================================================
+*** BUG #22 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+entropy_src_markov_ht.sv hardwires/fails to raise
+test_fail_hi_pulse_o even though the hi pair counter
+exceeded thresh_hi (20 > 4) — hi-side health test dead.
+
+Impact: high-threshold Markov (transition-count)
+violations are never reported; biased/cyclic entropy
+can pass the health check undetected.
+==================================================
+- /tmp/bug22_fixed/tb.sv:130: Verilog $finish
+- /tmp/bug22_fixed/tb.sv:130: Verilog $finish
+- /tmp/bug22_fixed/tb.sv:130: Second verilog $finish, exiting
+=== key lines ===
+=== After 40-bit ALTERNATING stream (all 01/10 pairs) ===
+  test_cnt_hi_o=20 test_fail_hi_pulse_o=0 test_fail_lo_pulse_o=0
+*** BUG #22 CONFIRMED on actual OpenTitan RTL ***

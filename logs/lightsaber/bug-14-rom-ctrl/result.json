@@ -1,0 +1,69 @@
+{
+  "focus": "rom_ctrl",
+  "files_read": [
+    "hw/ip/rom_ctrl/rtl/rom_ctrl.sv",
+    "hw/ip/rom_ctrl/rtl/rom_ctrl_fsm.sv",
+    "hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv",
+    "hw/ip/rom_ctrl/rtl/rom_ctrl_mux.sv",
+    "hw/ip/rom_ctrl/rtl/rom_ctrl_counter.sv",
+    "hw/ip/rom_ctrl/rtl/rom_ctrl_scrambled_rom.sv"
+  ],
+  "findings": [
+    {
+      "file": "hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv",
+      "title": "Single-bit comparison result can be faulted from digest mismatch to valid ROM",
+      "severity": "High",
+      "location": "matches_q/matches_d digest comparison and prim_mubi4_sender good_o generation (approximately lines 130-166)",
+      "description": "The security decision is accumulated in the single-bit register matches_q, initialized to 1 and updated as matches_q && (digest_word == exp_digest_word). The subsequent MuBi sender only encodes this one-bit decision; it does not independently verify it. A targeted bit upset that changes matches_q from 0 to 1 after a mismatching digest word, or while the comparator is in its terminal Done state, causes good_o to become a valid MuBi4True encoding. Likewise, a transient fault forcing the sole 32-bit equality result high during the mismatching word prevents matches_q from clearing. The sparse comparator FSM and redundant address counter do not detect either fault. An attacker able to alter a ROM word and inject a timed fault during boot can therefore make the power manager observe a successful ROM check and permit execution of modified immutable code. Forwarding the computed digest to key manager does not restore the ROM execution-integrity decision and may only perturb downstream key derivation.",
+      "recommendation": "Implement the digest acceptance decision with independent redundancy rather than merely MuBi-encoding a single result. For example, compare the full digest twice using independently preserved logic and different word order or control, maintain redundant fail-sticky state using complementary or sparse encoding, and raise a fatal alert on disagreement or invalid encoding. Generate good_o only when both independent checks explicitly report a match. Ensure that once either checker records a mismatch, no normal transition or single-bit state upset can restore a successful result before reset."
+    }
+  ],
+  "turns": 8,
+  "turn_log": [
+    {
+      "turn": 1,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl.sv",
+      "file_length": 23437
+    },
+    {
+      "turn": 2,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl_fsm.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl_fsm.sv",
+      "file_length": 13915
+    },
+    {
+      "turn": 3,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv",
+      "file_length": 5091
+    },
+    {
+      "turn": 4,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl_mux.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl_mux.sv",
+      "file_length": 4155
+    },
+    {
+      "turn": 5,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl_counter.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl_counter.sv",
+      "file_length": 4311
+    },
+    {
+      "turn": 6,
+      "assistant": "READ: hw/ip/rom_ctrl/rtl/rom_ctrl_scrambled_rom.sv",
+      "file_requested": "hw/ip/rom_ctrl/rtl/rom_ctrl_scrambled_rom.sv",
+      "file_length": 4819
+    },
+    {
+      "turn": 7,
+      "assistant": "DOUBT: Please provide the omitted remainder of rom_ctrl_fsm.sv, especially the Done/default handling, output generation, alert aggregation, digest capture, expected-digest loading, and all assertions. Also provide the omitted remainder of rom_ctrl.sv from the TL adapter onward, including mux/FSM instantiation, CSR wiring, alert senders, and pwrmgr/keymgr outputs."
+    },
+    {
+      "turn": 8,
+      "assistant": "{\"findings\":[{\"file\":\"hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv\",\"title\":\"Single-bit comparison result can be faulted from digest mismatch to valid ROM\",\"severity\":\"High\",\"location\":\"matches_q/matches_d digest comparison and prim_mubi4_sender good_o generation (approximately lines 130-166)\",\"description\":\"The security decision is accumulated in the single-bit register matches_q, initialized to 1 and updated as matches_q && (digest_word == exp_digest_word). The subsequent MuBi sender only encodes this one-bit decision; it does not independently verify it. A targeted bit upset that changes matches_q from 0 to 1 after a mismatching digest word, or while the comparator is in its terminal Done state, causes good_o to become a valid MuBi4True encoding. Likewise, a transient fault forcing the sole 32-bit equality result high during the mismatching word prevents matches_q from clearing. The sparse comparator FSM and redundant address counter do not detect either fault. An attacker able to alter a ROM word and inject a timed fault during boot can therefore make the power manager observe a successful ROM check and permit execution of modified immutable code. Forwarding the computed digest to key manager does not restore the ROM execution-integrity decision and may only perturb downstream key derivation.\",\"recommendation\":\"Implement the digest acceptance decision with independent redundancy rather than merely MuBi-encoding a single result. For example, compare the full digest twice using independently preserved logic and different word order or control, maintain redundant fail-sticky state using complementary or sparse encoding, and raise a fatal alert on disagreement or invalid encoding. Generate good_o only when both independent checks explicitly report a match. Ensure that once either checker records a mismatch, no normal transition or single-bit state upset can restore a successful result before reset.\"}]}"
+    }
+  ],
+  "known_vulns_before": 3
+}

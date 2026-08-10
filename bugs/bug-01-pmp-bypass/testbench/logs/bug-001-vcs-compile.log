@@ -1,0 +1,55 @@
+Command: vcs -full64 -sverilog -timescale=1ns/1ps +incdir+include rtl/ibex/ibex_pkg.sv \
+rtl/ibex/ibex_pmp.sv tb/tb_bug01_pmp.sv -o results/sim_bug01_v2 -l results/compile_bug01_v2.log \
+
+                         Chronologic VCS (TM)
+         Version U-2023.03_Full64 -- Thu Aug  6 15:44:32 2026
+
+                    Copyright (c) 1991 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+Parsing design file 'rtl/ibex/ibex_pkg.sv'
+Parsing design file 'rtl/ibex/ibex_pmp.sv'
+Parsing included file 'include/dv_fcov_macros.svh'.
+Back to file 'rtl/ibex/ibex_pmp.sv'.
+Parsing design file 'tb/tb_bug01_pmp.sv'
+Top Level Modules:
+       tb_bug01_pmp
+TimeScale is 1 ns / 1 ps
+
+Warning-[ENUMASSIGN] Illegal assignment to enum variable
+tb/tb_bug01_pmp.sv, 56
+tb_bug01_pmp, "csr_pmp_cfg_i = '{PMPNumRegions {'{default:'0}}};"
+  Only expressions of the enum type can be assigned to an enum variable. 
+  The type bit [0:0] is incompatible with the enum 'pmp_cfg_mode_e'
+  Expression: '0
+  Use the static cast operator to convert the expression to enum type.
+
+Starting vcs inline pass...
+
+3 modules and 0 UDP read.
+	However, due to incremental compilation, no re-compilation is necessary.
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x ../results/sim_bug01_v2 ]; then chmod a-x ../results/sim_bug01_v2; fi
+g++  -o ../results/sim_bug01_v2      -rdynamic  -Wl,-rpath='$ORIGIN'/sim_bug01_v2.daidir \
+-Wl,-rpath=./sim_bug01_v2.daidir -Wl,-rpath=/home/synopsys/tools/vcs/U-2023.03/linux64/lib \
+-L/home/synopsys/tools/vcs/U-2023.03/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1 \
+objs/amcQw_d.o   _4718_archive_1.so _prev_archive_1.so  SIM_l.o      rmapats_mop.o \
+rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o            -lvirsim -lerrorinf \
+-lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_tls.o \
+-Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive          /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_save_restore_new.o \
+-ldl  -lc -lm -lpthread -ldl 
+../results/sim_bug01_v2 up to date
+CPU time: .326 seconds to compile + .159 seconds to elab + .090 seconds to link

@@ -1,0 +1,6 @@
+[t=2] ac_range_check_overwrite=1 *** BUG 8 ***
+[t=3] ac_range_check_overwrite=1 *** BUG 8 ***
+[t=4] ac_range_check_overwrite=1 *** BUG 8 ***
+[t=5] ac_range_check_overwrite=1 *** BUG 8 ***
+[t=6] ac_range_check_overwrite=1 *** BUG 8 ***
+BUG CONFIRMED — Verilator 5.020

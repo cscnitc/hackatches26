@@ -1,0 +1,1 @@
+dm_csrs.sv:231: dmstatus.authenticated = 1'b1;  // BUG: hardwired, no auth

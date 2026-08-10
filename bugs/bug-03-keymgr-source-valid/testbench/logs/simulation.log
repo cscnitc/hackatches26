@@ -1,0 +1,6 @@
+[t=2] valid_in=0 key_vld_o=1 *** BUG 10 ***
+[t=3] valid_in=0 key_vld_o=1 *** BUG 10 ***
+[t=4] valid_in=0 key_vld_o=1 *** BUG 10 ***
+[t=5] valid_in=0 key_vld_o=1 *** BUG 10 ***
+[t=6] valid_in=0 key_vld_o=1 *** BUG 10 ***
+BUG CONFIRMED — Verilator 5.020

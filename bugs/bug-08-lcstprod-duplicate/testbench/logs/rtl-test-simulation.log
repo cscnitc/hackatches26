@@ -1,0 +1,22 @@
+=== LC state = LcStProd (PRODUCTION) ===
+  lc_raw_test_rma_o   = 1010 (should be OFF in prod)
+  lc_dft_en_o         = 1010 (should be OFF in prod)
+  lc_nvm_debug_en_o   = 1010 (should be OFF in prod)
+  lc_hw_debug_en_o    = 1010 (should be OFF in prod)
+  lc_cpu_en_o         = 1010 (should be ON in prod)
+  lc_keymgr_en_o      = 1010 (should be ON in prod)
+
+==================================================
+*** BUG #7 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+LcStProd (PRODUCTION) in TWO unique case branches
+(lc_ctrl_signal_decode.sv:116 and :139).
+Production device has DFT/debug/raw-test features
+ENABLED (dft_en/nvm_debug_en/raw_test_rma = On).
+
+Impact: debug & test access open in production,
+enabling readout of secrets / debug attacks.
+==================================================
+- /tmp/bug7_real/tb.sv:97: Verilog $finish
+- /tmp/bug7_real/tb.sv:97: Verilog $finish
+- /tmp/bug7_real/tb.sv:97: Second verilog $finish, exiting

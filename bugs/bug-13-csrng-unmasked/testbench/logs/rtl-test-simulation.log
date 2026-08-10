@@ -1,0 +1,23 @@
+=== CSRNG AES cipher core configuration ===
+  SecMasking (internal)   = 0  (BUG #20: should be 1)
+  key_clear_i (internal)  = 0  (BUG #23: should be 1)
+
+==================================================
+*** BUG #20 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+csrng_block_encrypt.sv:95 — .SecMasking(1'b0)
+CSRNG AES cipher runs UNMASKED.
+Impact: side-channel attacks on CSRNG AES key/cipher.
+==================================================
+
+==================================================
+*** BUG #23 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+csrng_block_encrypt.sv:116 — .key_clear_i(1'b0)
+AES key clearing DISABLED — key remanence.
+Impact: key material persists in CSRNG after use,
+enabling key recovery from residual state.
+==================================================
+- /tmp/bug20_real/tb.sv:98: Verilog $finish
+- /tmp/bug20_real/tb.sv:98: Verilog $finish
+- /tmp/bug20_real/tb.sv:98: Second verilog $finish, exiting

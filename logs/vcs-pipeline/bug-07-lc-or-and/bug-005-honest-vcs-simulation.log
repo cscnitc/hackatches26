@@ -1,0 +1,31 @@
+Chronologic VCS simulator copyright 1991-2023
+Contains Synopsys proprietary information.
+Compiler version U-2023.03_Full64; Runtime version U-2023.03_Full64;  Aug  9 11:04 2026
+============================================================
+Bug-005: LC State Transition Uses || Instead of && (HONEST)
+Target: lc_ctrl_state_transition.sv:140-141
+============================================================
+[T1: Valid (both replicas agree)] next=LcStRma err=0 (expect RMA, 0)
+[T1: Valid (both replicas agree)] PASS
+[T2: Invalid (both replicas invalid)] next=LcStProd err=1 (expect 1)
+[T2: Invalid (both replicas invalid)] PASS
+[T3: Fault (replica1 state decode corrupted)] || expr: lookup[PROD][RMA]=valid, lookup[RAW][RMA]=invalid
+[T3: Fault (replica1 state decode corrupted)]   => || evaluates TRUE (defective), && would be FALSE
+[T3: Fault (replica1 state decode corrupted)] RTL result: next_lc_state=LcStRma trans_invalid_error=1
+[T3: Fault (replica1 state decode corrupted)] HONEST: the || branch IS entered (next=RMA) but the module's
+         independent replica-consistency check (unique case on
+         dec_lc_state_i) still raises trans_invalid_error=1.
+         => the defect weakens the token-matrix agreement check,
+            but this layer alone does NOT complete the transition.
+VERDICT: BUG-005 defect CONFIRMED at expression level;
+         end-to-end authorization NOT achieved at this module
+         (defense-in-depth catches the corrupted replica).
+============================================================
+RESULTS: Total=3, Errors=0
+============================================================
+$finish called from file "tb_bug05_fixed.sv", line 143.
+$finish at simulation time                 3000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 3000 ps
+CPU Time:      0.140 seconds;       Data structure size:   0.0Mb
+Sun Aug  9 11:04:28 2026

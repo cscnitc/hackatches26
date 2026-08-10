@@ -1,0 +1,24 @@
+// Verilator lint waiver for Bug #15 AES PRNG masking testbench
+// Allows the behavioral model (aes_prng_bug15_model.sv) and bug15_tb.sv
+// to pass lint without false positives from simplified models.
+//
+// Usage:
+//   verilator --lint-only -f ctrlavx_shadowed.vlt aes_prng_bug15_model.sv
+
+`verilator_config
+
+// The behavioral model replaces prim_trivium with inline Bivium logic,
+// so input signals that would normally connect to the submodule appear
+// unused at the top level. Suppress these.
+lint_off -rule UNUSED -file "aes_prng_bug15_model.sv"
+
+// The testbench top-level module has separate io ports for AFL;
+// some outputs from the DUT may not be fully consumed.
+lint_off -rule UNDRIVEN -file "bug15_tb.sv"
+lint_off -rule PINMISSING -file "bug15_tb.sv"
+
+// WIDTH warnings from parameterized widths in the behavioral model
+lint_off -rule WIDTH -file "aes_prng_bug15_model.sv"
+
+// LITENDIAN warnings from byte ordering in sim_main.cpp
+lint_off -rule LITENDIAN

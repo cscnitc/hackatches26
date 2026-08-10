@@ -1,0 +1,6 @@
+38:  output logic            rnd_rep_err_o,
+39:  output logic            rnd_fips_err_o,
+44:  output logic            urnd_reseed_ack_o,
+161:  assign rnd_rep_err_o = rnd_req_complete & rnd_err_q;
+162:  assign rnd_fips_err_o = rnd_req_complete & ~rnd_fips_q;
+178:  assign urnd_reseed_ack_o = edn_urnd_ack_i;

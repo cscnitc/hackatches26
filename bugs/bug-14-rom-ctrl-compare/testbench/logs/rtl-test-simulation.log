@@ -1,0 +1,18 @@
+=== Case 1 (matching): done_o=0 good_o=1001 ===
+  internal matches_q (single-bit FF) = 0
+=== Case 2 (MISMATCH): done_o=1 good_o=1001 ===
+  internal matches_q (single FF, no redundancy) = 0
+
+==================================================
+*** BUG #21 VULNERABILITY CONFIRMED on actual RTL ***
+==================================================
+matches_q is a SINGLE flip-flop (rom_ctrl_compare.sv:94)
+holding the whole digest-compare result.
+
+A single-bit fault (glitch/EM/laser) can flip matches_q
+0->1, turning a mismatch into a valid-ROM signal —
+accepting corrupted boot ROM with M-mode privileges.
+==================================================
+- /tmp/bug21_real/tb.sv:112: Verilog $finish
+- /tmp/bug21_real/tb.sv:112: Verilog $finish
+- /tmp/bug21_real/tb.sv:112: Second verilog $finish, exiting

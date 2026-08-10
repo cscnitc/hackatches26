@@ -1,0 +1,2 @@
+116:    .key_clear_i          ( 1'b0                       ), // Disable
+117:    .key_clear_o          (                            ),

@@ -1,0 +1,31 @@
+VERILATED
+make: Leaving directory '/tmp/b24work/obj_dir'
+=== URND reseed (EDN responded with err=1) ===
+  urnd_reseed_ack_o   = 0 (granted despite EDN error)
+  edn_rnd_err_i       = 0 (was 1 during handshake, latched: 1)
+  edn_rnd_fips_i      = 0 (latched: 0)
+  xoshiro_seed_en     = 0 (pulsed during handshake)
+  xoshiro_seed_en was seen HIGH during tx: 1 (latched)
+
+==================================================
+*** BUG #24 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+otbn_rnd.sv:178: urnd_reseed_ack_o = edn_urnd_ack_i
+EDN responded with err_i=1 during the reseed; the
+handshake completed ANYWAY: xoshiro_seed_en pulsed
+(latched=1), seeding the URND PRNG from faulted/zero
+entropy. (err observed during tx, latched=1.)
+
+Impact: OTBN URND random outputs become predictable.
+==================================================
+- /tmp/bug24_fixed/tb.sv:154: Verilog $finish
+- /tmp/bug24_fixed/tb.sv:154: Verilog $finish
+- /tmp/bug24_fixed/tb.sv:154: Second verilog $finish, exiting
+=== key lines ===
+=== URND reseed (EDN responded with err=1) ===
+  urnd_reseed_ack_o   = 0 (granted despite EDN error)
+  xoshiro_seed_en     = 0 (pulsed during handshake)
+  xoshiro_seed_en was seen HIGH during tx: 1 (latched)
+*** BUG #24 CONFIRMED on actual OpenTitan RTL ***
+otbn_rnd.sv:178: urnd_reseed_ack_o = edn_urnd_ack_i
+handshake completed ANYWAY: xoshiro_seed_en pulsed

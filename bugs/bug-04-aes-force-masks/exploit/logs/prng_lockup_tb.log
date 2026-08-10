@@ -1,0 +1,23 @@
+=== AES masking PRNG (SecAllowForcingMasks=1) ===
+  Phase A (force_masks=0, zero seed): mask=0xaf0462239ab2c61c9481166d0ce00c95 / 0x271d44e15eb4ab815483720529819b56
+  Phase B (force_masks=1, zero seed): mask=0x00000000000000000000000000000000 / 0x00000000000000000000000000000000
+
+==================================================
+*** BUG #15 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+chip_earlgrey instantiates top_earlgrey with
+SecAesAllowForcingMasks=1'b1 (must be 1'b0 per
+AesSecAllowForcingMasksNonDefault static assert).
+
+Software: set CTRL_AUX_SHADOWED.FORCE_MASKS=1 and
+seed PRNG with zeros -> prim_trivium allow_lockup_i=1
+-> all-zero state KEPT -> masks CONSTANT ZERO.
+Phase A shows normal auto-restore (mask != 0);
+Phase B shows lockup (mask == 0).
+
+Impact: side-channel (power/EM) attacks on AES
+with no masking protection.
+==================================================
+- /tmp/bug15_real/tb.sv:152: Verilog $finish
+- /tmp/bug15_real/tb.sv:152: Verilog $finish
+- /tmp/bug15_real/tb.sv:152: Second verilog $finish, exiting

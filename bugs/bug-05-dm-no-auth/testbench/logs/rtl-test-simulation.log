@@ -1,0 +1,15 @@
+=== DMI read DMSTATUS: resp_valid=1 data=0x000c0c82 ===
+
+==================================================
+*** BUG #2 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+dm_csrs.sv:231 hardwires dmstatus.authenticated=1
+DMI read of DMSTATUS returns authenticated=1
+with NO AuthData handshake performed.
+
+Impact: any DMI/JTAG debugger gains authenticated
+debug access without authentication.
+==================================================
+- /tmp/bug2_real/tb.sv:125: Verilog $finish
+- /tmp/bug2_real/tb.sv:125: Verilog $finish
+- /tmp/bug2_real/tb.sv:125: Second verilog $finish, exiting

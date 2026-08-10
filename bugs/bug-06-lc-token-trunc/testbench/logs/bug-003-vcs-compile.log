@@ -1,0 +1,41 @@
+Command: vcs -full64 -sverilog -timescale=1ns/1ps tb/tb_bug03_lc_token.sv -o results/sim_bug03_v2 \
+-l results/compile_bug03_v2.log
+                         Chronologic VCS (TM)
+         Version U-2023.03_Full64 -- Thu Aug  6 15:44:50 2026
+
+                    Copyright (c) 1991 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+Parsing design file 'tb/tb_bug03_lc_token.sv'
+Top Level Modules:
+       tb_bug03_lc_token
+TimeScale is 1 ns / 1 ps
+Starting vcs inline pass...
+
+1 module and 0 UDP read.
+recompiling module tb_bug03_lc_token
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x ../results/sim_bug03_v2 ]; then chmod a-x ../results/sim_bug03_v2; fi
+g++  -o ../results/sim_bug03_v2      -rdynamic  -Wl,-rpath='$ORIGIN'/sim_bug03_v2.daidir \
+-Wl,-rpath=./sim_bug03_v2.daidir -Wl,-rpath=/home/synopsys/tools/vcs/U-2023.03/linux64/lib \
+-L/home/synopsys/tools/vcs/U-2023.03/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1 \
+objs/amcQw_d.o   _5434_archive_1.so _prev_archive_1.so  SIM_l.o      rmapats_mop.o \
+rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o            -lvirsim -lerrorinf \
+-lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_tls.o \
+-Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive          /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_save_restore_new.o \
+-ldl  -lc -lm -lpthread -ldl 
+../results/sim_bug03_v2 up to date
+CPU time: .123 seconds to compile + .108 seconds to elab + .097 seconds to link

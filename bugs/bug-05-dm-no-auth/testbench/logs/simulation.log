@@ -1,0 +1,6 @@
+[t=2] authenticated=1 *** BUG 2 ***
+[t=3] authenticated=1 *** BUG 2 ***
+[t=4] authenticated=1 *** BUG 2 ***
+[t=5] authenticated=1 *** BUG 2 ***
+[t=6] authenticated=1 *** BUG 2 ***
+BUG CONFIRMED — Verilator 5.020

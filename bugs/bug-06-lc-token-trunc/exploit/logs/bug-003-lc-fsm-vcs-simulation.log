@@ -1,0 +1,135 @@
+Chronologic VCS simulator copyright 1991-2023
+Contains Synopsys proprietary information.
+Compiler version U-2023.03_Full64; Runtime version U-2023.03_Full64;  Aug  6 23:27 2026
+============================================================
+Bug-003: LC Token Hash Truncated to 32 Bits (RTL Instantiation)
+Target: lc_ctrl_fsm.sv:456,497
+DUT: lc_ctrl_fsm (real OpenTitan RTL), PROD->RMA transition
+============================================================
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  35000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+[T1: Init FSM to IdleSt (PROD)] init_done=1 idle=1
+[T1: Init FSM to IdleSt (PROD)] PASS: reached IdleSt
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  75000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  85000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  95000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  125000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  135000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+[T3: Forged token at TokenHashSt (BUG case)] TokenHashSt reached, token_hash_req_o=1
+[T3: Forged token at TokenHashSt (BUG case)]   hashed_token_i[31:0] = deadbeef (forged, upper 96 bits = 0)
+[T3: Forged token at TokenHashSt (BUG case)]   rma_token_i[31:0]    = deadbeef (real token)
+[T3: Forged token at TokenHashSt (BUG case)]   [31:0] match:      1  (buggy comparison PASSES)
+[T3: Forged token at TokenHashSt (BUG case)]   full 128-bit match: 0  (correct comparison FAILS)
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  165000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  175000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  185000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+Warning-[RT-MTOCMUCS] More than one condition match in statement
+hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv, 93
+  More than one condition matches are found in 'unique case' statement inside 
+  tb_bug03_lc_fsm.u_dut.u_lc_ctrl_signal_decode.p_lc_signal_decode, at time 
+  195000ps.
+  
+  Line number 109 and 139 are overlapping.
+
+
+[T3: Forged token at TokenHashSt (BUG case)] After token check + transition sequence:
+[T3: Forged token at TokenHashSt (BUG case)]   token_invalid_error_o = 0  (0 = forged token ACCEPTED)
+[T3: Forged token at TokenHashSt (BUG case)]   trans_success_o       = 0  (1 = transition completed!)
+[T3: Forged token at TokenHashSt (BUG case)]   trans_invalid_error_o = 0
+[T3: Forged token at TokenHashSt (BUG case)]   flash_rma_error_o     = 0
+[T3: Forged token at TokenHashSt (BUG case)]   otp_prog_error_o      = 0
+[T3: Forged token at TokenHashSt (BUG case)]   otp_prog_lc_state_o   = LcStProd (next LC state)
+[T3: Forged token at TokenHashSt (BUG case)]   state_invalid_error_o = 0
+[T3: Forged token at TokenHashSt (BUG case)]   lc_flash_rma_req_o    = 1 (1 = FSM past token check, doing RMA wipe)
+[T3: Forged token at TokenHashSt (BUG case)] BUG CONFIRMED: forged token with matching [31:0] only
+[T3: Forged token at TokenHashSt (BUG case)]   passes the truncated comparison and the transition proceeds
+
+============================================================
+RESULTS: Total=3, Errors=0
+============================================================
+VERDICT: BUG-003 CONFIRMED
+  Module: lc_ctrl_fsm (OpenTitan RTL, instantiated directly)
+  Location: lc_ctrl_fsm.sv:456,497
+  Bug: hashed_token_i[31:0] == hashed_token_mux[31:0]
+  Impact: 2^128 -> 2^32 brute-force reduction
+  Mitigation: if (hashed_token_i == hashed_token_mux && ...)
+============================================================
+$finish called from file "tb/tb_bug03_lc_fsm.sv", line 273.
+$finish at simulation time              1136000
+           V C S   S i m u l a t i o n   R e p o r t 
+Time: 1136000 ps
+CPU Time:      0.140 seconds;       Data structure size:   0.0Mb
+Thu Aug  6 23:27:59 2026

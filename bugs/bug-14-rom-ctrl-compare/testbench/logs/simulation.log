@@ -1,0 +1,6 @@
+[t=2] fault=1 match=0 *** BUG 21 ***
+[t=3] fault=0 match=1 *** BUG 21 ***
+[t=4] fault=1 match=0 *** BUG 21 ***
+[t=5] fault=0 match=1 *** BUG 21 ***
+[t=6] fault=1 match=0 *** BUG 21 ***
+BUG CONFIRMED — Verilator 5.020

@@ -1,0 +1,72 @@
+[
+  {
+    "title": "CTR_DRBG secret state is processed by an explicitly unmasked AES datapath",
+    "file": "hw/ip/csrng/rtl/csrng_block_encrypt.sv",
+    "severity": "high",
+    "focus": "?",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "AES mask-forcing test feature is unconditionally enabled in the synthesized cipher core",
+    "file": "hw/ip/aes/rtl/aes.sv",
+    "severity": "High",
+    "focus": "?",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "Key manager accepts repeated or faulted EDN data without a synthesized error path",
+    "file": "hw/ip/keymgr/rtl/keymgr_reseed_ctrl.sv",
+    "severity": "Medium",
+    "focus": "keymgr",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "Illegal redundant data-enable FSM states recover silently without raising the FSM fault",
+    "file": "hw/ip/keymgr/rtl/keymgr_data_en_state.sv",
+    "severity": "Medium",
+    "focus": "keymgr",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "Single-bit comparison result can be faulted from digest mismatch to valid ROM",
+    "file": "hw/ip/rom_ctrl/rtl/rom_ctrl_compare.sv",
+    "severity": "High",
+    "focus": "rom_ctrl",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "EDN response errors are discarded, allowing ping PRNG operation without validated entropy",
+    "file": "hw/top_earlgrey/ip_autogen/alert_handler/rtl/alert_handler.sv",
+    "severity": "Medium",
+    "focus": "alert_handler",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "Markov health-test threshold violations can never generate a failure",
+    "file": "hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv",
+    "severity": "Medium",
+    "focus": "entropy_src",
+    "found_at": "2026-08-05 15:59:04"
+  },
+  {
+    "title": "Production lifecycle state is also decoded as test-unlocked, enabling debug and DFT controls",
+    "file": "hw/ip/lc_ctrl/rtl/lc_ctrl_signal_decode.sv",
+    "severity": "High",
+    "found_at": "2026-08-05 16:30:43",
+    "focus": "lc_ctrl"
+  },
+  {
+    "title": "AES key and internal data are not explicitly cleared after CSRNG encryption operations",
+    "file": "hw/ip/csrng/rtl/csrng_block_encrypt.sv",
+    "severity": "Medium",
+    "focus": "csrng",
+    "found_at": "2026-08-05 16:33:12"
+  },
+  {
+    "title": "URND reseeding accepts EDN responses without validating response error or health",
+    "file": "hw/ip/otbn/rtl/otbn_rnd.sv",
+    "severity": "Medium",
+    "focus": "otbn",
+    "found_at": "2026-08-05 16:33:12"
+  }
+]

@@ -1,0 +1,95 @@
+{
+  "focus": "entropy_src",
+  "files_read": [
+    "hw/ip/entropy_src/rtl/entropy_src.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_core.sv",
+    "hw/ip/entropy_src/entropy_src.core",
+    "hw/ip/entropy_src/data/entropy_src.hjsonREAD:",
+    "hw/ip/entropy_src/rtl/entropy_src_core.sv",
+    "hw/ip/entropy_src/entropy_src.core",
+    "hw/ip/entropy_src/data/entropy_src.hjson",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_ack_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_field_en.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_repcnt_ht.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_repcnts_ht.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_adaptp_ht.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_bucket_ht.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_reg_top.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_core.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_reg_top.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_pkg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm_pkg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_ack_sm_pkg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_core.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_main_sm.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_reg_top.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_field_en.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv",
+    "hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv"
+  ],
+  "findings": [
+    {
+      "file": "hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv",
+      "title": "Markov health-test threshold violations can never generate a failure",
+      "severity": "Medium",
+      "location": "Final output assignments for test_fail_hi_pulse_o and test_fail_lo_pulse_o near end of module",
+      "description": "The Markov health-test module receives programmable high and low thresholds, tracks per-stream transition-pair counters, computes the selected maximum/minimum/sum counter values, and exposes itself as an entropy health test. Nevertheless, both failure outputs are unconditionally tied to 1'b0. Consequently, an RNG stream whose transition statistics violate markov_hi_thresholds or markov_lo_thresholds cannot be rejected or counted as a health-test failure through this module. The generated register interface exposes Markov threshold registers, and entropy_src documentation lists the Markov test as protection against correlated noise, so the synthesized tie-offs defeat an advertised entropy-quality check rather than merely suppressing simulation diagnostics. An attacker capable of influencing the physical noise source toward a correlated pattern may therefore reduce seed entropy without triggering the configured Markov failure path; other health tests may detect some patterns but do not restore the missing transition-correlation invariant.",
+      "recommendation": "Implement synthesized high- and low-threshold comparisons at the completed health-test window, analogous to entropy_src_adaptp_ht: assert test_fail_hi_pulse_o when active_i && window_wrap_pulse_i && test_cnt_hi_o > thresh_hi_i, and assert test_fail_lo_pulse_o when active_i && window_wrap_pulse_i && test_cnt_lo_o < thresh_lo_i. Verify that both pulses are included in the core's any-failure aggregation, alert counters, startup acceptance decision, continuous-test rejection path, and recoverable-alert handling. If the Markov test is intentionally unsupported, remove or lock its configuration/status interface and documentation and ensure the unsupported test cannot be represented as active or relied upon for entropy qualification."
+    }
+  ],
+  "turns": 7,
+  "turn_log": [
+    {
+      "turn": 1,
+      "assistant": "READ: hw/ip/entropy_src/rtl/entropy_src.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_core.sv\nREAD: hw/ip/entropy_src/entropy_src.core\nREAD: hw/ip/entropy_src/data/entropy_src.hjsonREAD: hw/ip/entropy_src/rtl/entropy_src.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_core.sv\nREAD: hw/ip/entropy_src/entropy_src.core\nREAD: hw/ip/entropy_src/data/entropy_src.hjson",
+      "file_requested": "hw/ip/entropy_src/data/entropy_src.hjson",
+      "file_length": 78923
+    },
+    {
+      "turn": 2,
+      "assistant": "READ: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_ack_sm.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_field_en.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv\nDOUBT: Please provide the remainder of entropy_src_core.sv after the signal declarations, especially configuration decoding, FIFO instantiations, conditioner/SHA3 control, health-test aggregation, alert generation, and hw2reg/output assignments.",
+      "file_requested": "hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv",
+      "file_length": 1553
+    },
+    {
+      "turn": 3,
+      "assistant": "READ: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_repcnt_ht.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_repcnts_ht.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_adaptp_ht.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_bucket_ht.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv\nDOUBT: The returned entropy_src_core.sv content is truncated at the declarations. Please retrieve the remainder beginning at the health-test counter declarations through endmodule. This is required to determine whether FIFO, counter, SHA3, external-health-test, OTP-policy, and FSM errors are correctly aggregated into fatal alerts and local escalation.\nDOUBT: How are otp_en_entropy_src_fw_read_i and otp_en_entropy_src_fw_over_i generated and synchronized into clk_i at the top level, and do invalid MuBi8 values fail closed and raise an alert anywhere upstream or inside entropy_src?\nDOUBT: Is the entropy_src Stub parameter ever set to 1 in a production Earlgrey/Darjeeling top-level configuration or synthesis target, and is there a build-time check preventing that configuration?",
+      "file_requested": "hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv",
+      "file_length": 5125
+    },
+    {
+      "turn": 4,
+      "assistant": "DOUBT: entropy_src_markov_ht.sv computes pair counters and receives high/low thresholds, but both test_fail_hi_pulse_o and test_fail_lo_pulse_o are hardwired to 1'b0. Is the Markov test deliberately monitor-only or disabled by specification, or is failure detection implemented elsewhere by comparing test_cnt_hi_o/test_cnt_lo_o against thresholds? Please trace these outputs and counters in entropy_src_core.sv and the generated register/documentation definitions.\n\nDOUBT: Please retrieve entropy_src_core.sv from the first executable/configuration-decoding statement after its declarations through endmodule. Previous responses repeatedly returned only the beginning, preventing trace of health-test outputs into seed acceptance and alerts.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv",
+      "file_requested": "hw/ip/entropy_src/rtl/entropy_src_reg_top.sv",
+      "file_length": 120304
+    },
+    {
+      "turn": 5,
+      "assistant": "The supplied modules establish two concrete audit questions: Markov failure outputs are permanently zero, and the entropy-source configuration is software-programmable through several threshold and mode fields. I am tracing whether those are intentional policy choices or whether they can permit untested entropy to be accepted; the current excerpts do not yet show the core\u2019s aggregation and seed-acceptance logic.READ: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv (return the remainder beginning at the truncated line `state_d` in `FWInsertMsg`, through `endmodule`)\nREAD: hw/ip/entropy_src/rtl/entropy_src_core.sv (return the complete file, or at minimum the sections after the declarations through `endmodule`)\nREAD: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv (return the sections implementing `MODULE_ENABLE`, `CONF`, `ENTROPY_CONTROL`, health-test thresholds, `REGWEN`, `SW_REGUPD`, and the final register read/write logic)\nREAD: hw/ip/entropy_src/rtl/entropy_src_pkg.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_main_sm_pkg.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_ack_sm_pkg.sv\nREAD: hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv (confirm whether its `enable_o` output controls the core and all health-test state)\nDOUBT: Is `entropy_src_markov_ht` intentionally disabled in the entropy_src design specification, or should Markov threshold comparisons generate health-test failure pulses? If disabled, identify the documented rationale and any compensating health test.\nDOUBT: Are the health-test threshold registers writable while entropy_src is enabled, or are writes blocked by `REGWEN`/`SW_REGUPD` until disablement? Please verify the generated register access policy and core-side use of `qe` write-enable signals.\nDOUBT: Does the core require all enabled health tests to pass before asserting `entropy_src_hw_if_o.es_ack`/`es_fips`, or can a missing/disabled test output be treated as pass?",
+      "file_requested": "hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv",
+      "file_length": 4893
+    },
+    {
+      "turn": 6,
+      "assistant": "The available excerpts show the FSMs fail closed and latch their error states, but the core data path remains truncated at declarations. I am narrowing the remaining audit to two questions that can produce actionable findings: whether Markov failures are intentionally excluded, and whether the bounded disable drain can discard entropy that the health-test accounting assumes was processed.READ: hw/ip/entropy_src/rtl/entropy_src_core.sv \u2014 return the complete remainder after the declaration `logic [HalfRegWidth-1:0]`, including all assignments, submodule instances, FIFO control, SHA3 control, health-test aggregation, alert logic, output logic, and `endmodule`.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv \u2014 return the remainder after the truncated statement `state_d` in `FWInsertMsg`, through `endmodule`.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv \u2014 return the remainder after `logic [15:0] adaptp_hi_watermarks_re;`, including register write enables, `REGWEN`, `SW_REGUPD`, threshold-register access policy, and `reg2hw` assignments.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_field_en.sv \u2014 already received; no further data needed.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv \u2014 already received; no further data needed.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv \u2014 already received; no further data needed.\n\nREAD: hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv \u2014 return the remainder after the truncated `entropy_src_hw2reg_repcnts_thresholds_reg_t` declarations, including the complete register structures and addresses/access metadata if present.\n\nDOUBT: Is the Markov health test intentionally monitor-only? In `entropy_src_markov_ht.sv`, both `test_fail_hi_pulse_o` and `test_fail_lo_pulse_o` are hardwired to zero despite receiving thresholds and producing counters. Identify the design specification or compensating logic that makes this intentional; otherwise this is a candidate health-test bypass.\n\nDOUBT: Does `entropy_src_enable_delay.enable_o` intentionally permit disablement after exactly four cycles while any monitored FIFO remains nonempty? `data_in_flight` is gated by `|fifo_timer_q`, so a FIFO that remains nonempty after the timer expires is no longer considered in flight. Confirm that the downstream disable/clear behavior deliberately discards such entries and that no accepted raw sample can be omitted from required health-test accounting.\n\nDOUBT: Are `EsFifoDepth` and `DistrFifoDepth` constrained to values for which `prim_util_pkg::vbits()` and the FIFO pointer logic are valid? The exposed parameters permit arbitrary values, while `entropy_src_core.sv` derives widths from them and `entropy_src.sv` passes them directly to the core. Identify any elaboration-time constraints or parameter assertions.\n\nDOUBT: Are entropy-source threshold and mode registers writable while the source is enabled, or are all security-critical updates blocked until disablement? Please verify the generated register access policy and whether `qe` signals are used to reject or defer live threshold changes.",
+      "file_requested": "hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv",
+      "file_length": 37169
+    },
+    {
+      "turn": 7,
+      "assistant": "{\"findings\":[{\"file\":\"hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv\",\"title\":\"Markov health-test threshold violations can never generate a failure\",\"severity\":\"Medium\",\"location\":\"Final output assignments for test_fail_hi_pulse_o and test_fail_lo_pulse_o near end of module\",\"description\":\"The Markov health-test module receives programmable high and low thresholds, tracks per-stream transition-pair counters, computes the selected maximum/minimum/sum counter values, and exposes itself as an entropy health test. Nevertheless, both failure outputs are unconditionally tied to 1'b0. Consequently, an RNG stream whose transition statistics violate markov_hi_thresholds or markov_lo_thresholds cannot be rejected or counted as a health-test failure through this module. The generated register interface exposes Markov threshold registers, and entropy_src documentation lists the Markov test as protection against correlated noise, so the synthesized tie-offs defeat an advertised entropy-quality check rather than merely suppressing simulation diagnostics. An attacker capable of influencing the physical noise source toward a correlated pattern may therefore reduce seed entropy without triggering the configured Markov failure path; other health tests may detect some patterns but do not restore the missing transition-correlation invariant.\",\"recommendation\":\"Implement synthesized high- and low-threshold comparisons at the completed health-test window, analogous to entropy_src_adaptp_ht: assert test_fail_hi_pulse_o when active_i && window_wrap_pulse_i && test_cnt_hi_o > thresh_hi_i, and assert test_fail_lo_pulse_o when active_i && window_wrap_pulse_i && test_cnt_lo_o < thresh_lo_i. Verify that both pulses are included in the core's any-failure aggregation, alert counters, startup acceptance decision, continuous-test rejection path, and recoverable-alert handling. If the Markov test is intentionally unsupported, remove or lock its configuration/status interface and documentation and ensure the unsupported test cannot be represented as active or relied upon for entropy qualification.\"}]}"
+    }
+  ],
+  "known_vulns_before": 3
+}

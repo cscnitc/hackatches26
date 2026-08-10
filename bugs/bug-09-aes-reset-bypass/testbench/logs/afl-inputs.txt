@@ -1,0 +1,9 @@
+=== Bug #16: AES data_out reset bypass ===
+# Crash requires: rst_ni=0, data_out_we=3 (SP2V_HIGH) → write during reset → data survives
+
+# Crash 000000 (time:6124): havoc mutation #8 from seed
+# First 17 bytes: rst=0 we=3 (byte 0x07 = 0b00000111), data=0xADAD...
+# Second 17 bytes: rst=1 we=0, detection fires
+hex (chunk 1): 07 ad ad ad ad ad ad ad ad ad ad ad ad ad ad ad ad
+hex (chunk 2): 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+

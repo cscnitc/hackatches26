@@ -1,0 +1,6 @@
+[t=2] test_fail_hi=0 *** BUG 22 ***
+[t=3] test_fail_hi=0 *** BUG 22 ***
+[t=4] test_fail_hi=0 *** BUG 22 ***
+[t=5] test_fail_hi=0 *** BUG 22 ***
+[t=6] test_fail_hi=0 *** BUG 22 ***
+BUG CONFIRMED — Verilator 5.020

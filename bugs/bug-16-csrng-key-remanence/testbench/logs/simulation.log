@@ -1,0 +1,6 @@
+[t=2] key_clear=0 *** BUG 23 ***
+[t=3] key_clear=0 *** BUG 23 ***
+[t=4] key_clear=0 *** BUG 23 ***
+[t=5] key_clear=0 *** BUG 23 ***
+[t=6] key_clear=0 *** BUG 23 ***
+BUG CONFIRMED — Verilator 5.020

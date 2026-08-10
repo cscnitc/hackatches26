@@ -1,0 +1,4 @@
+`verilator_config
+lint_off -rule UNUSED -file "*"
+lint_off -rule UNDRIVEN -file "*"
+lint_off -rule WIDTH -file "*"

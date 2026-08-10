@@ -1,0 +1,15 @@
+=== After reseed: cnt_err_o=0 reseed_ack_o=0 reseed_done_o=0 ===
+=== EDN err/fips path: u_edn_req.err_o=0 u_edn_req.fips_o=1 (both UNCONNECTED) ===
+
+==================================================
+*** BUG #18 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+keymgr_reseed_ctrl.sv:73-74 — prim_edn_req .err_o()
+and .fips_o() BOTH unconnected. EDN FIPS error is
+detected internally (fips_o=1) but silently DROPPED:
+no error reaches cnt_err_o / alerts.
+Impact: keys derived from bad/faulted entropy.
+==================================================
+- /tmp/bug18_real/tb.sv:81: Verilog $finish
+- /tmp/bug18_real/tb.sv:81: Verilog $finish
+- /tmp/bug18_real/tb.sv:81: Second verilog $finish, exiting

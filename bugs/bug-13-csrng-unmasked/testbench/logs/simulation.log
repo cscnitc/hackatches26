@@ -1,0 +1,6 @@
+[t=2] SecMasking=0 *** BUG 20 ***
+[t=3] SecMasking=0 *** BUG 20 ***
+[t=4] SecMasking=0 *** BUG 20 ***
+[t=5] SecMasking=0 *** BUG 20 ***
+[t=6] SecMasking=0 *** BUG 20 ***
+BUG CONFIRMED — Verilator 5.020

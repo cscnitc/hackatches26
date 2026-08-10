@@ -1,0 +1,6 @@
+[t=1] LcStProd in two unique case branches *** BUG #7 ***
+[t=2] LcStProd in two unique case branches *** BUG #7 ***
+[t=3] LcStProd in two unique case branches *** BUG #7 ***
+[t=4] LcStProd in two unique case branches *** BUG #7 ***
+[t=5] LcStProd in two unique case branches *** BUG #7 ***
+BUG CONFIRMED — Verilator 5.020

@@ -1,0 +1,59 @@
+Command: vcs -full64 -sverilog -timescale=1ns/1ps +incdir+include rtl/prim/prim_util_pkg.sv \
+rtl/prim/prim_mubi_pkg.sv rtl/lc_ctrl/lc_ctrl_reg_pkg.sv rtl/lc_ctrl/lc_ctrl_state_pkg.sv \
+rtl/lc_ctrl/lc_ctrl_pkg.sv rtl/lc_ctrl/lc_ctrl_state_transition.sv tb/tb_bug05_lc_or_vs_and.sv \
+-o results/sim_bug05_v2 -l results/compile_bug05_v2.log
+                         Chronologic VCS (TM)
+         Version U-2023.03_Full64 -- Thu Aug  6 15:47:27 2026
+
+                    Copyright (c) 1991 - 2023 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+   or distribution of this software is strictly prohibited.  Licensed Products
+     communicate with Synopsys servers for the purpose of providing software
+    updates, detecting software piracy and verifying that customers are using
+    Licensed Products in conformity with the applicable License Key for such
+  Licensed Products. Synopsys will use information gathered in connection with
+    this process to deliver software updates and pursue software pirates and
+                                   infringers.
+
+ Inclusivity & Diversity - Visit SolvNetPlus to read the "Synopsys Statement on
+            Inclusivity and Diversity" (Refer to article 000036315 at
+                        https://solvnetplus.synopsys.com)
+
+Parsing design file 'rtl/prim/prim_util_pkg.sv'
+Parsing design file 'rtl/prim/prim_mubi_pkg.sv'
+Parsing included file 'include/prim_assert.sv'.
+Back to file 'rtl/prim/prim_mubi_pkg.sv'.
+Parsing design file 'rtl/lc_ctrl/lc_ctrl_reg_pkg.sv'
+Parsing design file 'rtl/lc_ctrl/lc_ctrl_state_pkg.sv'
+Parsing design file 'rtl/lc_ctrl/lc_ctrl_pkg.sv'
+Parsing included file 'include/prim_assert.sv'.
+Back to file 'rtl/lc_ctrl/lc_ctrl_pkg.sv'.
+Parsing design file 'rtl/lc_ctrl/lc_ctrl_state_transition.sv'
+Parsing design file 'tb/tb_bug05_lc_or_vs_and.sv'
+Top Level Modules:
+       tb_bug05_lc_or_vs_and
+TimeScale is 1 ns / 1 ps
+Starting vcs inline pass...
+
+6 modules and 0 UDP read.
+recompiling package prim_util_pkg
+recompiling package prim_mubi_pkg
+recompiling package lc_ctrl_reg_pkg
+recompiling package lc_ctrl_state_pkg
+recompiling package lc_ctrl_pkg
+recompiling module tb_bug05_lc_or_vs_and
+All of 6 modules done
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+if [ -x ../results/sim_bug05_v2 ]; then chmod a-x ../results/sim_bug05_v2; fi
+g++  -o ../results/sim_bug05_v2      -rdynamic  -Wl,-rpath='$ORIGIN'/sim_bug05_v2.daidir \
+-Wl,-rpath=./sim_bug05_v2.daidir -Wl,-rpath=/home/synopsys/tools/vcs/U-2023.03/linux64/lib \
+-L/home/synopsys/tools/vcs/U-2023.03/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1 \
+objs/amcQw_d.o   _10104_archive_1.so _prev_archive_1.so  SIM_l.o      rmapats_mop.o \
+rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o            -lvirsim -lerrorinf \
+-lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_tls.o \
+-Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive          /home/synopsys/tools/vcs/U-2023.03/linux64/lib/vcs_save_restore_new.o \
+-ldl  -lc -lm -lpthread -ldl 
+../results/sim_bug05_v2 up to date
+CPU time: .165 seconds to compile + .110 seconds to elab + .099 seconds to link

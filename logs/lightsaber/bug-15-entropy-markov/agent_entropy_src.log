@@ -1,0 +1,98 @@
+=== Phase 0: Fetching DeepWiki codebase overview ===
+Overview: 6300 chars
+
+
+--- Turn 1/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_core.sv
+  Agent requests: hw/ip/entropy_src/entropy_src.core
+  Agent requests: hw/ip/entropy_src/data/entropy_src.hjsonREAD:
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_core.sv
+  Agent requests: hw/ip/entropy_src/entropy_src.core
+  Agent requests: hw/ip/entropy_src/data/entropy_src.hjson
+
+--- Turn 2/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_ack_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_field_en.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv
+
+--- Turn 3/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_repcnt_ht.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_repcnts_ht.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_adaptp_ht.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_bucket_ht.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv
+
+--- Turn 4/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+
+--- Turn 5/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_core.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_pkg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm_pkg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_ack_sm_pkg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv
+
+--- Turn 6/15 ---
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_core.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_field_en.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv
+  Agent requests: hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv
+
+--- Turn 7/15 ---
+  Agent produced final findings: 1 issue(s)
+
+=== Done ===
+Focus: entropy_src
+Known vulns before: 3, new: 1
+Files read: 36, Turns: 7
+Output: /home/participant/ches-akhi/ches-new/mjolnir-rtl-security/outputs/agentic_runs/20260805_154604/result.json
+Session: /home/participant/ches-akhi/ches-new/mjolnir-rtl-security/outputs/session.json
+  - hw/ip/entropy_src/rtl/entropy_src.sv
+  - hw/ip/entropy_src/rtl/entropy_src_core.sv
+  - hw/ip/entropy_src/entropy_src.core
+  - hw/ip/entropy_src/data/entropy_src.hjsonREAD:
+  - hw/ip/entropy_src/rtl/entropy_src_core.sv
+  - hw/ip/entropy_src/entropy_src.core
+  - hw/ip/entropy_src/data/entropy_src.hjson
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_ack_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv
+  - hw/ip/entropy_src/rtl/entropy_src_field_en.sv
+  - hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_repcnt_ht.sv
+  - hw/ip/entropy_src/rtl/entropy_src_repcnts_ht.sv
+  - hw/ip/entropy_src/rtl/entropy_src_adaptp_ht.sv
+  - hw/ip/entropy_src/rtl/entropy_src_bucket_ht.sv
+  - hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_core.sv
+  - hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+  - hw/ip/entropy_src/rtl/entropy_src_pkg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm_pkg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_ack_sm_pkg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_enable_delay.sv
+  - hw/ip/entropy_src/rtl/entropy_src_core.sv
+  - hw/ip/entropy_src/rtl/entropy_src_main_sm.sv
+  - hw/ip/entropy_src/rtl/entropy_src_reg_top.sv
+  - hw/ip/entropy_src/rtl/entropy_src_field_en.sv
+  - hw/ip/entropy_src/rtl/entropy_src_cntr_reg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_watermark_reg.sv
+  - hw/ip/entropy_src/rtl/entropy_src_reg_pkg.sv
+  [Medium] Markov health-test threshold violations can never generate a failure (hw/ip/entropy_src/rtl/entropy_src_markov_ht.sv)

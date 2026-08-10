@@ -1,0 +1,14 @@
+=== After exercising FSM: fsm_err_o=0 data_hw_en_o=0 ===
+
+==================================================
+*** BUG #19 CONFIRMED on actual OpenTitan RTL ***
+==================================================
+FSM default case (keymgr_data_en_state.sv:127)
+silently recovers to StCtrlDataDis; fsm_err_o stays 0.
+
+Impact: FSM corruption from fault injection is never
+reported — defeats the error-detection countermeasure.
+==================================================
+- /tmp/bug19_real/tb.sv:71: Verilog $finish
+- /tmp/bug19_real/tb.sv:71: Verilog $finish
+- /tmp/bug19_real/tb.sv:71: Second verilog $finish, exiting
